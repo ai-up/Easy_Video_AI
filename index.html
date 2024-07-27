@@ -19,7 +19,7 @@
             padding: 20px 40px;
             border-radius: 10px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            width: 400px;
+            width: 600px;
         }
         h1 {
             text-align: center;
@@ -32,9 +32,9 @@
         }
         input[type="text"],
         input[type="url"],
-        input[type="time"],
-        select {
-            width: 100%;
+        select,
+        input[type="color"] {
+            width: calc(100% - 22px);
             padding: 10px;
             margin-top: 5px;
             border-radius: 5px;
@@ -43,6 +43,26 @@
         }
         input[type="checkbox"] {
             margin-right: 10px;
+        }
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            margin-top: 20px;
+        }
+        .half-width {
+            width: 48%;
+            display: inline-block;
+        }
+        .add-text-group {
+            display: flex;
+            align-items: center;
+        }
+        .add-text-group > input {
+            width: 32%;
+            margin-right: 2%;
+        }
+        .add-text-group > input:last-child {
+            margin-right: 0;
         }
         button {
             display: block;
@@ -71,33 +91,71 @@
             <label for="projectName">Name of Project:</label>
             <input type="text" id="projectName" name="projectName" maxlength="100" required>
 
-            <label>
-                <input type="checkbox" id="addIntroCheckbox" name="addIntroCheckbox">
-                Add an Intro Boilerplate
-            </label>
-
-            <div id="introBoilerplateDiv" class="hidden">
-                <label for="introBoilerplate">Intro Boilerplate:</label>
-                <select id="introBoilerplate" name="introBoilerplate">
-                    <option value="boilerplate intro test 1">boilerplate intro test 1</option>
-                    <option value="boilerplate intro test 2">boilerplate intro test 2</option>
-                </select>
-            </div>
-
             <label for="videoUrl">Video URL:</label>
             <input type="url" id="videoUrl" name="videoUrl" required>
 
-            <label>
+            <div class="checkbox-group">
+                <input type="checkbox" id="addIntroCheckbox" name="addIntroCheckbox">
+                <label for="addIntroCheckbox">Add an Intro Boilerplate</label>
+                <div id="introBoilerplateDiv" class="hidden">
+                    <select id="introBoilerplate" name="introBoilerplate">
+                        <option value="boilerplate intro test 1">boilerplate intro test 1</option>
+                        <option value="boilerplate intro test 2">boilerplate intro test 2</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="checkbox-group">
+                <input type="checkbox" id="addEndCheckbox" name="addEndCheckbox">
+                <label for="addEndCheckbox">Add an Ending Boilerplate</label>
+                <div id="endBoilerplateDiv" class="hidden">
+                    <select id="endBoilerplate" name="endBoilerplate">
+                        <option value="boilerplate exit test 1">boilerplate exit test 1</option>
+                        <option value="boilerplate exit test 2">boilerplate exit test 2</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="checkbox-group">
                 <input type="checkbox" id="cropVideoCheckbox" name="cropVideoCheckbox">
-                Crop Video
-            </label>
+                <label for="cropVideoCheckbox">Crop Video</label>
+                <div id="cropDiv" class="hidden">
+                    <input type="text" id="startCrop" name="startCrop" placeholder="Start Crop (hh:mm:ss)" class="half-width">
+                    <input type="text" id="endCrop" name="endCrop" placeholder="End Crop (hh:mm:ss)" class="half-width">
+                </div>
+            </div>
 
-            <div id="cropDiv" class="hidden">
-                <label for="startCrop">Start Crop (hh:mm:ss):</label>
-                <input type="text" id="startCrop" name="startCrop">
+            <div class="checkbox-group">
+                <input type="checkbox" id="addIntroTextCheckbox" name="addIntroTextCheckbox">
+                <label for="addIntroTextCheckbox">Add captions on Intro boilerplate</label>
+                <div id="introTextDiv" class="hidden">
+                    <input type="text" id="introOverlayText" name="introOverlayText" placeholder="Intro boilerplate text overlay">
+                    <input type="color" id="introTextColor" name="introTextColor" value="#ffffff">
+                    <input type="color" id="introBgColor" name="introBgColor" value="#000000">
+                </div>
+            </div>
 
-                <label for="endCrop">End Crop (hh:mm:ss):</label>
-                <input type="text" id="endCrop" name="endCrop">
+            <div class="checkbox-group">
+                <input type="checkbox" id="addEndTextCheckbox" name="addEndTextCheckbox">
+                <label for="addEndTextCheckbox">Add captions on Ending boilerplate</label>
+                <div id="endTextDiv" class="hidden">
+                    <input type="text" id="endOverlayText" name="endOverlayText" placeholder="Ending boilerplate text overlay">
+                    <input type="color" id="endTextColor" name="endTextColor" value="#ffffff">
+                    <input type="color" id="endBgColor" name="endBgColor" value="#000000">
+                </div>
+            </div>
+
+            <div class="checkbox-group">
+                <input type="checkbox" id="addMainTextCheckbox" name="addMainTextCheckbox">
+                <label for="addMainTextCheckbox">Add overlay text during the main video</label>
+            </div>
+            <div id="mainTextDiv" class="hidden">
+                <div class="add-text-group">
+                    <input type="text" placeholder="Text" name="mainText[]">
+                    <input type="text" placeholder="Start point (hh:mm:ss)" name="mainTextStart[]">
+                    <input type="text" placeholder="Length (hh:mm:ss)" name="mainTextLength[]">
+                </div>
+                <button type="button" onclick="addTextField()">+ Add a new text</button>
             </div>
 
             <button type="button" onclick="submitForm()">Submit</button>
@@ -106,19 +164,54 @@
 
     <script>
         document.getElementById('addIntroCheckbox').addEventListener('change', function() {
-            const introBoilerplateDiv = document.getElementById('introBoilerplateDiv');
-            introBoilerplateDiv.classList.toggle('hidden', !this.checked);
+            document.getElementById('introBoilerplateDiv').classList.toggle('hidden', !this.checked);
+        });
+
+        document.getElementById('addEndCheckbox').addEventListener('change', function() {
+            document.getElementById('endBoilerplateDiv').classList.toggle('hidden', !this.checked);
         });
 
         document.getElementById('cropVideoCheckbox').addEventListener('change', function() {
-            const cropDiv = document.getElementById('cropDiv');
-            cropDiv.classList.toggle('hidden', !this.checked);
+            document.getElementById('cropDiv').classList.toggle('hidden', !this.checked);
         });
+
+        document.getElementById('addIntroTextCheckbox').addEventListener('change', function() {
+            document.getElementById('introTextDiv').classList.toggle('hidden', !this.checked);
+        });
+
+        document.getElementById('addEndTextCheckbox').addEventListener('change', function() {
+            document.getElementById('endTextDiv').classList.toggle('hidden', !this.checked);
+        });
+
+        document.getElementById('addMainTextCheckbox').addEventListener('change', function() {
+            document.getElementById('mainTextDiv').classList.toggle('hidden', !this.checked);
+        });
+
+        function addTextField() {
+            const mainTextDiv = document.getElementById('mainTextDiv');
+            const newGroup = document.createElement('div');
+            newGroup.className = 'add-text-group';
+            newGroup.innerHTML = `
+                <input type="text" placeholder="Text" name="mainText[]">
+                <input type="text" placeholder="Start point (hh:mm:ss)" name="mainTextStart[]">
+                <input type="text" placeholder="Length (hh:mm:ss)" name="mainTextLength[]">
+            `;
+            mainTextDiv.insertBefore(newGroup, mainTextDiv.lastElementChild);
+        }
 
         function submitForm() {
             const formData = new FormData(document.getElementById('videoForm'));
             const data = {};
-            formData.forEach((value, key) => (data[key] = value));
+            formData.forEach((value, key) => {
+                if (!data[key]) {
+                    data[key] = value;
+                } else {
+                    if (!Array.isArray(data[key])) {
+                        data[key] = [data[key]];
+                    }
+                    data[key].push(value);
+                }
+            });
             
             fetch('https://hook.eu2.make.com/phlw9djl3k9x0k53aws536seq8ybhs14', {
                 method: 'POST',
