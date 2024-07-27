@@ -3,11 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Video Editor</title>
+    <title>Easy Video Edit</title>
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
+            background: linear-gradient(to right, #1e3c72, #2a5298);
             display: flex;
             justify-content: center;
             align-items: center;
@@ -16,19 +16,23 @@
         }
         .container {
             background-color: white;
-            padding: 20px 40px;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            width: 600px;
+            padding: 30px 50px;
+            border-radius: 20px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+            width: 400px;
+            max-width: 100%;
         }
         h1 {
             text-align: center;
             color: #333;
+            font-size: 24px;
+            margin-bottom: 20px;
         }
         label {
             display: block;
             margin-top: 20px;
             color: #555;
+            font-size: 14px;
         }
         input[type="text"],
         input[type="url"],
@@ -40,7 +44,7 @@
             margin-top: 5px;
             border-radius: 5px;
             border: 1px solid #ccc;
-            font-size: 16px;
+            font-size: 14px;
         }
         input[type="checkbox"] {
             margin-right: 10px;
@@ -50,7 +54,8 @@
             align-items: center;
             margin-top: 20px;
         }
-        .checkbox-group select {
+        .checkbox-group select,
+        .checkbox-group input[type="color"] {
             margin-left: 10px;
             flex-grow: 1;
         }
@@ -61,6 +66,7 @@
         .add-text-group {
             display: flex;
             align-items: center;
+            margin-top: 10px;
         }
         .add-text-group > input {
             width: 32%;
@@ -72,7 +78,7 @@
         button {
             display: block;
             width: 100%;
-            padding: 10px;
+            padding: 12px;
             background-color: #007bff;
             color: white;
             border: none;
@@ -95,13 +101,20 @@
         .hidden {
             display: none;
         }
+        .color-picker {
+            display: flex;
+            align-items: center;
+        }
+        .color-picker input {
+            margin-left: 10px;
+        }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>Video Editor Form</h1>
+        <h1>Easy Video Edit</h1>
         <form id="videoForm">
-            <label for="projectName">Name of Project:</label>
+            <label for="projectName">Give your project a name:</label>
             <input type="text" id="projectName" name="projectName" maxlength="100" required>
 
             <label for="videoUrl">Video URL:</label>
@@ -109,20 +122,44 @@
 
             <div class="checkbox-group">
                 <input type="checkbox" id="addIntroCheckbox" name="addIntroCheckbox">
-                <label for="addIntroCheckbox">Add an Intro Boilerplate</label>
+                <label for="addIntroCheckbox">Intro boilerplate</label>
                 <select id="introBoilerplate" name="introBoilerplate" class="hidden">
-                    <option value="boilerplate intro test 1">boilerplate intro test 1</option>
-                    <option value="boilerplate intro test 2">boilerplate intro test 2</option>
+                    <option value="boilerplate intro test 1">Boilerplate intro test 1</option>
+                    <option value="boilerplate intro test 2">Boilerplate intro test 2</option>
                 </select>
             </div>
 
             <div class="checkbox-group">
+                <input type="checkbox" id="addIntroTextCheckbox" name="addIntroTextCheckbox">
+                <label for="addIntroTextCheckbox">Add captions to intro boilerplate</label>
+                <textarea id="introOverlayText" name="introOverlayText" placeholder="Enter boilerplate text here... The text should wrap over at least 3 lines so it can be seen easily" rows="3" class="hidden"></textarea>
+                <div id="introColorPickers" class="color-picker hidden">
+                    <label for="introTextColor">Text color:</label>
+                    <input type="color" id="introTextColor" name="introTextColor" value="#ffffff">
+                    <label for="introBgColor">Background color:</label>
+                    <input type="color" id="introBgColor" name="introBgColor" value="#000000">
+                </div>
+            </div>
+
+            <div class="checkbox-group">
                 <input type="checkbox" id="addEndCheckbox" name="addEndCheckbox">
-                <label for="addEndCheckbox">Add an Ending Boilerplate</label>
+                <label for="addEndCheckbox">Ending boilerplate</label>
                 <select id="endBoilerplate" name="endBoilerplate" class="hidden">
-                    <option value="boilerplate exit test 1">boilerplate exit test 1</option>
-                    <option value="boilerplate exit test 2">boilerplate exit test 2</option>
+                    <option value="boilerplate exit test 1">Boilerplate exit test 1</option>
+                    <option value="boilerplate exit test 2">Boilerplate exit test 2</option>
                 </select>
+            </div>
+
+            <div class="checkbox-group">
+                <input type="checkbox" id="addEndTextCheckbox" name="addEndTextCheckbox">
+                <label for="addEndTextCheckbox">Add captions to ending boilerplate</label>
+                <textarea id="endOverlayText" name="endOverlayText" placeholder="Enter boilerplate text here... The text should wrap over at least 3 lines so it can be seen easily" rows="3" class="hidden"></textarea>
+                <div id="endColorPickers" class="color-picker hidden">
+                    <label for="endTextColor">Text color:</label>
+                    <input type="color" id="endTextColor" name="endTextColor" value="#ffffff">
+                    <label for="endBgColor">Background color:</label>
+                    <input type="color" id="endBgColor" name="endBgColor" value="#000000">
+                </div>
             </div>
 
             <div class="checkbox-group">
@@ -135,43 +172,25 @@
             </div>
 
             <div class="checkbox-group">
-                <input type="checkbox" id="addIntroTextCheckbox" name="addIntroTextCheckbox">
-                <label for="addIntroTextCheckbox">Add captions on Intro boilerplate</label>
-                <div id="introTextDiv" class="hidden">
-                    <textarea id="introOverlayText" name="introOverlayText" placeholder="Intro boilerplate text overlay" rows="3"></textarea>
-                    <label for="introTextColor">Text color</label>
-                    <input type="color" id="introTextColor" name="introTextColor" value="#ffffff">
-                    <label for="introBgColor">Background color</label>
-                    <input type="color" id="introBgColor" name="introBgColor" value="#000000">
-                </div>
-            </div>
-
-            <div class="checkbox-group">
-                <input type="checkbox" id="addEndTextCheckbox" name="addEndTextCheckbox">
-                <label for="addEndTextCheckbox">Add captions on Ending boilerplate</label>
-                <div id="endTextDiv" class="hidden">
-                    <textarea id="endOverlayText" name="endOverlayText" placeholder="Ending boilerplate text overlay" rows="3"></textarea>
-                    <label for="endTextColor">Text color</label>
-                    <input type="color" id="endTextColor" name="endTextColor" value="#ffffff">
-                    <label for="endBgColor">Background color</label>
-                    <input type="color" id="endBgColor" name="endBgColor" value="#000000">
-                </div>
-            </div>
-
-            <div class="checkbox-group">
                 <input type="checkbox" id="addMainTextCheckbox" name="addMainTextCheckbox">
-                <label for="addMainTextCheckbox">Add overlay text during the main video</label>
+                <label for="addMainTextCheckbox">Overlay Texts</label>
             </div>
             <div id="mainTextDiv" class="hidden">
                 <div class="add-text-group">
                     <input type="text" placeholder="Text" name="mainText[]">
                     <input type="text" placeholder="Start point (hh:mm:ss)" name="mainTextStart[]">
-                    <input type="text" placeholder="Length (hh:mm:ss)" name="mainTextLength[]">
+                    <input type="text" placeholder="Length (seconds)" name="mainTextLength[]">
                 </div>
-                <button type="button" class="small-button" onclick="addTextField()">+ Add a new text</button>
+                <div id="mainColorPickers" class="color-picker hidden">
+                    <label for="mainTextColor">Text color:</label>
+                    <input type="color" id="mainTextColor" name="mainTextColor" value="#ffffff">
+                    <label for="mainBgColor">Background color:</label>
+                    <input type="color" id="mainBgColor" name="mainBgColor" value="#000000">
+                </div>
+                <button type="button" class="small-button" onclick="addTextField()">+ ADD NEW TEXT</button>
             </div>
 
-            <button type="button" onclick="submitForm()">Submit</button>
+            <button type="button" onclick="submitForm()">SUBMIT</button>
         </form>
     </div>
 
@@ -180,24 +199,27 @@
             document.getElementById('introBoilerplate').classList.toggle('hidden', !this.checked);
         });
 
+        document.getElementById('addIntroTextCheckbox').addEventListener('change', function() {
+            document.getElementById('introOverlayText').classList.toggle('hidden', !this.checked);
+            document.getElementById('introColorPickers').classList.toggle('hidden', !this.checked);
+        });
+
         document.getElementById('addEndCheckbox').addEventListener('change', function() {
             document.getElementById('endBoilerplate').classList.toggle('hidden', !this.checked);
+        });
+
+        document.getElementById('addEndTextCheckbox').addEventListener('change', function() {
+            document.getElementById('endOverlayText').classList.toggle('hidden', !this.checked);
+            document.getElementById('endColorPickers').classList.toggle('hidden', !this.checked);
         });
 
         document.getElementById('cropVideoCheckbox').addEventListener('change', function() {
             document.getElementById('cropDiv').classList.toggle('hidden', !this.checked);
         });
 
-        document.getElementById('addIntroTextCheckbox').addEventListener('change', function() {
-            document.getElementById('introTextDiv').classList.toggle('hidden', !this.checked);
-        });
-
-        document.getElementById('addEndTextCheckbox').addEventListener('change', function() {
-            document.getElementById('endTextDiv').classList.toggle('hidden', !this.checked);
-        });
-
         document.getElementById('addMainTextCheckbox').addEventListener('change', function() {
             document.getElementById('mainTextDiv').classList.toggle('hidden', !this.checked);
+            document.getElementById('mainColorPickers').classList.toggle('hidden', !this.checked);
         });
 
         function addTextField() {
@@ -207,7 +229,7 @@
             newGroup.innerHTML = `
                 <input type="text" placeholder="Text" name="mainText[]">
                 <input type="text" placeholder="Start point (hh:mm:ss)" name="mainTextStart[]">
-                <input type="text" placeholder="Length (hh:mm:ss)" name="mainTextLength[]">
+                <input type="text" placeholder="Length (seconds)" name="mainTextLength[]">
             `;
             mainTextDiv.insertBefore(newGroup, mainTextDiv.lastElementChild);
         }
@@ -240,4 +262,3 @@
     </script>
 </body>
 </html>
-
