@@ -33,7 +33,8 @@
         input[type="text"],
         input[type="url"],
         select,
-        input[type="color"] {
+        input[type="color"],
+        textarea {
             width: calc(100% - 22px);
             padding: 10px;
             margin-top: 5px;
@@ -48,6 +49,10 @@
             display: flex;
             align-items: center;
             margin-top: 20px;
+        }
+        .checkbox-group select {
+            margin-left: 10px;
+            flex-grow: 1;
         }
         .half-width {
             width: 48%;
@@ -68,7 +73,7 @@
             display: block;
             width: 100%;
             padding: 10px;
-            background-color: #28a745;
+            background-color: #007bff;
             color: white;
             border: none;
             border-radius: 5px;
@@ -77,7 +82,15 @@
             margin-top: 20px;
         }
         button:hover {
-            background-color: #218838;
+            background-color: #0056b3;
+        }
+        .small-button {
+            padding: 8px 20px;
+            width: auto;
+            background-color: #6c757d;
+        }
+        .small-button:hover {
+            background-color: #5a6268;
         }
         .hidden {
             display: none;
@@ -97,23 +110,19 @@
             <div class="checkbox-group">
                 <input type="checkbox" id="addIntroCheckbox" name="addIntroCheckbox">
                 <label for="addIntroCheckbox">Add an Intro Boilerplate</label>
-                <div id="introBoilerplateDiv" class="hidden">
-                    <select id="introBoilerplate" name="introBoilerplate">
-                        <option value="boilerplate intro test 1">boilerplate intro test 1</option>
-                        <option value="boilerplate intro test 2">boilerplate intro test 2</option>
-                    </select>
-                </div>
+                <select id="introBoilerplate" name="introBoilerplate" class="hidden">
+                    <option value="boilerplate intro test 1">boilerplate intro test 1</option>
+                    <option value="boilerplate intro test 2">boilerplate intro test 2</option>
+                </select>
             </div>
 
             <div class="checkbox-group">
                 <input type="checkbox" id="addEndCheckbox" name="addEndCheckbox">
                 <label for="addEndCheckbox">Add an Ending Boilerplate</label>
-                <div id="endBoilerplateDiv" class="hidden">
-                    <select id="endBoilerplate" name="endBoilerplate">
-                        <option value="boilerplate exit test 1">boilerplate exit test 1</option>
-                        <option value="boilerplate exit test 2">boilerplate exit test 2</option>
-                    </select>
-                </div>
+                <select id="endBoilerplate" name="endBoilerplate" class="hidden">
+                    <option value="boilerplate exit test 1">boilerplate exit test 1</option>
+                    <option value="boilerplate exit test 2">boilerplate exit test 2</option>
+                </select>
             </div>
 
             <div class="checkbox-group">
@@ -129,8 +138,10 @@
                 <input type="checkbox" id="addIntroTextCheckbox" name="addIntroTextCheckbox">
                 <label for="addIntroTextCheckbox">Add captions on Intro boilerplate</label>
                 <div id="introTextDiv" class="hidden">
-                    <input type="text" id="introOverlayText" name="introOverlayText" placeholder="Intro boilerplate text overlay">
+                    <textarea id="introOverlayText" name="introOverlayText" placeholder="Intro boilerplate text overlay" rows="3"></textarea>
+                    <label for="introTextColor">Text color</label>
                     <input type="color" id="introTextColor" name="introTextColor" value="#ffffff">
+                    <label for="introBgColor">Background color</label>
                     <input type="color" id="introBgColor" name="introBgColor" value="#000000">
                 </div>
             </div>
@@ -139,8 +150,10 @@
                 <input type="checkbox" id="addEndTextCheckbox" name="addEndTextCheckbox">
                 <label for="addEndTextCheckbox">Add captions on Ending boilerplate</label>
                 <div id="endTextDiv" class="hidden">
-                    <input type="text" id="endOverlayText" name="endOverlayText" placeholder="Ending boilerplate text overlay">
+                    <textarea id="endOverlayText" name="endOverlayText" placeholder="Ending boilerplate text overlay" rows="3"></textarea>
+                    <label for="endTextColor">Text color</label>
                     <input type="color" id="endTextColor" name="endTextColor" value="#ffffff">
+                    <label for="endBgColor">Background color</label>
                     <input type="color" id="endBgColor" name="endBgColor" value="#000000">
                 </div>
             </div>
@@ -155,7 +168,7 @@
                     <input type="text" placeholder="Start point (hh:mm:ss)" name="mainTextStart[]">
                     <input type="text" placeholder="Length (hh:mm:ss)" name="mainTextLength[]">
                 </div>
-                <button type="button" onclick="addTextField()">+ Add a new text</button>
+                <button type="button" class="small-button" onclick="addTextField()">+ Add a new text</button>
             </div>
 
             <button type="button" onclick="submitForm()">Submit</button>
@@ -164,11 +177,11 @@
 
     <script>
         document.getElementById('addIntroCheckbox').addEventListener('change', function() {
-            document.getElementById('introBoilerplateDiv').classList.toggle('hidden', !this.checked);
+            document.getElementById('introBoilerplate').classList.toggle('hidden', !this.checked);
         });
 
         document.getElementById('addEndCheckbox').addEventListener('change', function() {
-            document.getElementById('endBoilerplateDiv').classList.toggle('hidden', !this.checked);
+            document.getElementById('endBoilerplate').classList.toggle('hidden', !this.checked);
         });
 
         document.getElementById('cropVideoCheckbox').addEventListener('change', function() {
