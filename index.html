@@ -4,50 +4,117 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Video Editor</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .container {
+            background-color: white;
+            padding: 20px 40px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 400px;
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        label {
+            display: block;
+            margin-top: 20px;
+            color: #555;
+        }
+        input[type="text"],
+        input[type="url"],
+        input[type="time"],
+        select {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            font-size: 16px;
+        }
+        input[type="checkbox"] {
+            margin-right: 10px;
+        }
+        button {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+        button:hover {
+            background-color: #218838;
+        }
+        .hidden {
+            display: none;
+        }
+    </style>
 </head>
 <body>
-    <h1>Video Editor Form</h1>
-    <form id="videoForm">
-        <label for="introAssetType">Intro Asset Type:</label><br>
-        <input type="text" id="introAssetType" name="introAssetType"><br>
+    <div class="container">
+        <h1>Video Editor Form</h1>
+        <form id="videoForm">
+            <label for="projectName">Name of Project:</label>
+            <input type="text" id="projectName" name="projectName" maxlength="100" required>
 
-        <label for="introAssetUrl">Intro Asset URL:</label><br>
-        <input type="text" id="introAssetUrl" name="introAssetUrl"><br>
+            <label>
+                <input type="checkbox" id="addIntroCheckbox" name="addIntroCheckbox">
+                Add an Intro Boilerplate
+            </label>
 
-        <label for="introAssetDuration">Intro Asset Duration (seconds):</label><br>
-        <input type="number" id="introAssetDuration" name="introAssetDuration"><br>
+            <div id="introBoilerplateDiv" class="hidden">
+                <label for="introBoilerplate">Intro Boilerplate:</label>
+                <select id="introBoilerplate" name="introBoilerplate">
+                    <option value="boilerplate intro test 1">boilerplate intro test 1</option>
+                    <option value="boilerplate intro test 2">boilerplate intro test 2</option>
+                </select>
+            </div>
 
-        <label for="mainAssetUrl">Main Asset URL:</label><br>
-        <input type="text" id="mainAssetUrl" name="mainAssetUrl"><br>
+            <label for="videoUrl">Video URL:</label>
+            <input type="url" id="videoUrl" name="videoUrl" required>
 
-        <label for="cropStartSeconds">Crop Start Seconds:</label><br>
-        <input type="number" id="cropStartSeconds" name="cropStartSeconds"><br>
+            <label>
+                <input type="checkbox" id="cropVideoCheckbox" name="cropVideoCheckbox">
+                Crop Video
+            </label>
 
-        <label for="clipLength">Clip Length (seconds):</label><br>
-        <input type="number" id="clipLength" name="clipLength"><br>
+            <div id="cropDiv" class="hidden">
+                <label for="startCrop">Start Crop (hh:mm:ss):</label>
+                <input type="text" id="startCrop" name="startCrop">
 
-        <label for="endAssetType">End Asset Type:</label><br>
-        <input type="text" id="endAssetType" name="endAssetType"><br>
+                <label for="endCrop">End Crop (hh:mm:ss):</label>
+                <input type="text" id="endCrop" name="endCrop">
+            </div>
 
-        <label for="endAssetUrl">End Asset URL:</label><br>
-        <input type="text" id="endAssetUrl" name="endAssetUrl"><br>
-
-        <label for="endAssetDuration">End Asset Duration (seconds):</label><br>
-        <input type="number" id="endAssetDuration" name="endAssetDuration"><br>
-
-        <label for="endBoilerplateStartPoint">End Boilerplate Start Point:</label><br>
-        <input type="number" id="endBoilerplateStartPoint" name="endBoilerplateStartPoint"><br>
-
-        <label for="aspectRatio">Aspect Ratio:</label><br>
-        <input type="text" id="aspectRatio" name="aspectRatio"><br>
-
-        <label for="callbackUrl">Callback URL:</label><br>
-        <input type="text" id="callbackUrl" name="callbackUrl"><br>
-
-        <button type="button" onclick="submitForm()">Submit</button>
-    </form>
+            <button type="button" onclick="submitForm()">Submit</button>
+        </form>
+    </div>
 
     <script>
+        document.getElementById('addIntroCheckbox').addEventListener('change', function() {
+            const introBoilerplateDiv = document.getElementById('introBoilerplateDiv');
+            introBoilerplateDiv.classList.toggle('hidden', !this.checked);
+        });
+
+        document.getElementById('cropVideoCheckbox').addEventListener('change', function() {
+            const cropDiv = document.getElementById('cropDiv');
+            cropDiv.classList.toggle('hidden', !this.checked);
+        });
+
         function submitForm() {
             const formData = new FormData(document.getElementById('videoForm'));
             const data = {};
