@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Video Editor</title>
+</head>
+<body>
+    <h1>Video Editor Form</h1>
+    <form id="videoForm">
+        <label for="introAssetType">Intro Asset Type:</label><br>
+        <input type="text" id="introAssetType" name="introAssetType"><br>
+
+        <label for="introAssetUrl">Intro Asset URL:</label><br>
+        <input type="text" id="introAssetUrl" name="introAssetUrl"><br>
+
+        <label for="introAssetDuration">Intro Asset Duration (seconds):</label><br>
+        <input type="number" id="introAssetDuration" name="introAssetDuration"><br>
+
+        <label for="mainAssetUrl">Main Asset URL:</label><br>
+        <input type="text" id="mainAssetUrl" name="mainAssetUrl"><br>
+
+        <label for="cropStartSeconds">Crop Start Seconds:</label><br>
+        <input type="number" id="cropStartSeconds" name="cropStartSeconds"><br>
+
+        <label for="clipLength">Clip Length (seconds):</label><br>
+        <input type="number" id="clipLength" name="clipLength"><br>
+
+        <label for="endAssetType">End Asset Type:</label><br>
+        <input type="text" id="endAssetType" name="endAssetType"><br>
+
+        <label for="endAssetUrl">End Asset URL:</label><br>
+        <input type="text" id="endAssetUrl" name="endAssetUrl"><br>
+
+        <label for="endAssetDuration">End Asset Duration (seconds):</label><br>
+        <input type="number" id="endAssetDuration" name="endAssetDuration"><br>
+
+        <label for="endBoilerplateStartPoint">End Boilerplate Start Point:</label><br>
+        <input type="number" id="endBoilerplateStartPoint" name="endBoilerplateStartPoint"><br>
+
+        <label for="aspectRatio">Aspect Ratio:</label><br>
+        <input type="text" id="aspectRatio" name="aspectRatio"><br>
+
+        <label for="callbackUrl">Callback URL:</label><br>
+        <input type="text" id="callbackUrl" name="callbackUrl"><br>
+
+        <button type="button" onclick="submitForm()">Submit</button>
+    </form>
+
+    <script>
+        function submitForm() {
+            const formData = new FormData(document.getElementById('videoForm'));
+            const data = {};
+            formData.forEach((value, key) => (data[key] = value));
+            
+            fetch('https://hook.eu2.make.com/phlw9djl3k9x0k53aws536seq8ybhs14', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            })
+            .then(response => response.json())
+            .then(data => console.log(data))
+            .catch(error => console.error('Error:', error));
+        }
+    </script>
+</body>
+</html>
+
